@@ -190,7 +190,7 @@ export const getWorkoutsByDate = async (req, res, next) => {
     const user = await User.findById(userId);
     let date = req.query.date ? new Date(req.query.date) : new Date();
     if (!user) {
-      return next(createError(404, "User not found"));
+      return next(createError(404, "Nie znaleziono użytkownika!"));
     }
     const startOfDay = new Date(
       date.getFullYear(),

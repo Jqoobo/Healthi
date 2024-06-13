@@ -1,9 +1,17 @@
-import React, { useState } from "react";
+import React, { useState, useEffect} from "react";
 import styled from "styled-components";
-import LogoImage from "../assets/Images/lol.jpg";
-import AuthImage from "../assets/Images/1032569.png";
+import LogoImage from "../assets/Images/logo_healthi_2.svg";
+import Image1 from "../assets/Images/1.jpg";
+import Image2 from "../assets/Images/2.jpg";
+import Image3 from "../assets/Images/3.jpg";
+import Image4 from "../assets/Images/4.jpg";
+import Image5 from "../assets/Images/5.jpg";
+import Image6 from "../assets/Images/6.jpg";
+import Image7 from "../assets/Images/7.jpg";
+import Image8 from "../assets/Images/8.jpg";
 import SignIn from "../components/SignIn";
 import SignUp from "../components/SignUp";
+
 
 const Container = styled.div`
   flex: 1;
@@ -15,7 +23,7 @@ const Container = styled.div`
   }
 `;
 const Left = styled.div`
-  flex: 1;
+  flex: 2;
   position: relative;
   @media (max-width: 700px) {
     display: none;
@@ -23,7 +31,7 @@ const Left = styled.div`
 `;
 const Logo = styled.img`
   position: absolute;
-  width: 70px;
+  width: 80px;
   top: 40px;
   left: 60px;
   z-index: 10;
@@ -36,7 +44,7 @@ const Image = styled.img`
 `;
 
 const Right = styled.div`
-  flex: 1;
+  flex: 3;
   position: relative;
   display: flex;
   flex-direction: column;
@@ -64,27 +72,44 @@ const TextButton = styled.span`
 
 const LoginPage = () => {
   const [login, setLogin] = useState(false);
+
+  const images = [Image1, Image2, Image3, Image4, Image5, Image6, Image7, Image8];
+  const [randomImage, setRandomImage] = useState("");
+
+  useEffect(() => {
+    const randomIndex = Math.floor(Math.random() * images.length);
+    const newRandomImage = images[randomIndex];
+    if (newRandomImage !== randomImage) {
+      const image = new window.Image();
+      image.src = newRandomImage;
+      image.onload = () => {
+        setRandomImage(newRandomImage);
+      };
+    }
+  }, []);
+
   return (
     <Container>
       <Left>
-        <Logo src={LogoImage} />
-        <Image src={AuthImage} />
+        
+        <Image src={randomImage} />
       </Left>
       <Right>
+      <Logo src={LogoImage} />
         {!login ? (
           <>
             <SignIn />
             <Text>
-              Don't have an account?{" "}
-              <TextButton onClick={() => setLogin(true)}>SignUp</TextButton>
+              Nie posiadasz konta w Healthi?{" "}
+              <TextButton onClick={() => setLogin(true)}>Zarejestruj się</TextButton>
             </Text>
           </>
         ) : (
           <>
             <SignUp />
             <Text>
-              Already have an account?{" "}
-              <TextButton onClick={() => setLogin(false)}>SignIn</TextButton>
+              Posiadasz już konto w Healthi?{" "}
+              <TextButton onClick={() => setLogin(false)}>Zaloguj się</TextButton>
             </Text>
           </>
         )}

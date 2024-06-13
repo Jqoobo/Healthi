@@ -61,8 +61,8 @@ const SignIn = () => {
   return (
     <Container>
       <div>
-        <Title>Welcome to Fittrack 👋</Title>
-        <Span>Please login with your details here</Span>
+        <Title>Witamy w Healthi!🐬</Title>
+        <Span>Zaloguj się, przy użyciu swoich danych</Span>
       </div>
       <div
         style={{
@@ -72,20 +72,20 @@ const SignIn = () => {
         }}
       >
         <TextInput
-          label="Email Address"
-          placeholder="Enter your email address"
+          label="Adres email"
+          placeholder="Wprowadź swój adres email"
           value={email}
           handelChange={(e) => setEmail(e.target.value)}
         />
         <TextInput
-          label="Password"
-          placeholder="Enter your password"
+          label="Hasło"
+          placeholder="Wprowadź swoje hasło"
           password
           value={password}
           handelChange={(e) => setPassword(e.target.value)}
         />
         <Button
-          text="SignIn"
+          text="Zaloguj się"
           onClick={handelSignIn}
           isLoading={loading}
           isDisabled={buttonDisabled}

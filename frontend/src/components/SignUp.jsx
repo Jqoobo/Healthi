@@ -61,8 +61,8 @@ const SignUp = () => {
   return (
     <Container>
       <div>
-        <Title>Create New Account 👋</Title>
-        <Span>Please enter details to create a new account</Span>
+        <Title>Załóż konto🐬</Title>
+        <Span>Wprowadź swoje dane, aby założyć konto</Span>
       </div>
       <div
         style={{
@@ -72,26 +72,26 @@ const SignUp = () => {
         }}
       >
         <TextInput
-          label="Full name"
-          placeholder="Enter your full name"
+          label="Imię i nazwisko"
+          placeholder="Wprowadź swoje imię i nazwisko"
           value={name}
           handelChange={(e) => setName(e.target.value)}
         />
         <TextInput
-          label="Email Address"
-          placeholder="Enter your email address"
+          label="Adres email"
+          placeholder="Wprowadź swój adres email"
           value={email}
           handelChange={(e) => setEmail(e.target.value)}
         />
         <TextInput
-          label="Password"
-          placeholder="Enter your password"
+          label="Hasło"
+          placeholder="Wprowadź swoje hasło"
           password
           value={password}
           handelChange={(e) => setPassword(e.target.value)}
         />
         <Button
-          text="SignUp"
+          text="Załóż konto"
           onClick={handelSignUp}
           isLoading={loading}
           isDisabled={buttonDisabled}
