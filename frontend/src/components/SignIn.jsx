@@ -33,7 +33,7 @@ const SignIn = () => {
 
   const validateInputs = () => {
     if (!email || !password) {
-      alert("Please fill in all fields");
+      alert("Wypełnij wszystkie pola❗️");
       return false;
     }
     return true;
@@ -46,7 +46,7 @@ const SignIn = () => {
       await UserSignIn({ email, password })
         .then((res) => {
           dispatch(loginSuccess(res.data));
-          alert("Login Success");
+          alert("Pomyślnie zalogowano✅");
           setLoading(false);
           setButtonDisabled(false);
         })

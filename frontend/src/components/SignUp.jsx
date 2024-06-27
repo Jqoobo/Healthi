@@ -34,7 +34,7 @@ const SignUp = () => {
 
   const validateInputs = () => {
     if (!name || !email || !password) {
-      alert("Please fill in all fields");
+      alert("Wypełnij wszystkie pola❗️");
       return false;
     }
     return true;
@@ -47,7 +47,7 @@ const SignUp = () => {
       await UserSignUp({ name, email, password })
         .then((res) => {
           dispatch(loginSuccess(res.data));
-          alert("Account Created Success");
+          alert("Konto zostało założone pomyślnie✅");
           setLoading(false);
           setButtonDisabled(false);
         })

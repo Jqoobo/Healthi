@@ -45,9 +45,7 @@ const FlexWrap = styled.div`
 const Section = styled.div`
   display: flex;
   flex-direction: column;
-  padding: 0px 16px;
   gap: 22px;
-  padding: 0px 16px;
   @media (max-width: 600px) {
     gap: 12px;
   }
@@ -68,11 +66,7 @@ const Dashboard = () => {
   const [data, setData] = useState();
   const [buttonLoading, setButtonLoading] = useState(false);
   const [todaysWorkouts, setTodaysWorkouts] = useState([]);
-  const [workout, setWorkout] = useState(`#Legs
--Back Squat
--5 setsX15 reps
--30 kg
--10 min`);
+  const [workout, setWorkout] = useState(`Nie wybrałeś typu treningu❗️`);
 
   const dashboardData = async () => {
     setLoading(true);
@@ -114,7 +108,7 @@ const Dashboard = () => {
   return (
     <Container>
       <Wrapper>
-        <Title>Dashboard</Title>
+        <Title>Panel główny</Title>
         <FlexWrap>
           {counts.map((item) => (
             <CountsCard item={item} data={data} />
@@ -133,7 +127,7 @@ const Dashboard = () => {
         </FlexWrap>
 
         <Section>
-          <Title>Todays Workouts</Title>
+          <Title>Dzisiejsze treningi</Title>
           <CardWrapper>
             {todaysWorkouts.map((workout) => (
               <WorkoutCard workout={workout} />

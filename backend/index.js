@@ -16,7 +16,7 @@ app.use("/api/user/", UserRoutes);
 // error handler
 app.use((err, req, res, next) => {
   const status = err.status || 500;
-  const message = err.message || "Something went wrong";
+  const message = err.message || "Coś poszło nie tak...";
   return res.status(status).json({
     success: false,
     status,
@@ -26,7 +26,7 @@ app.use((err, req, res, next) => {
 
 app.get("/", async (req, res) => {
   res.status(200).json({
-    message: "Hello developers from GFG",
+    message: "Witają was Jakub i Konrad!",
   });
 });
 
@@ -34,9 +34,9 @@ const connectDB = () => {
   mongoose.set("strictQuery", true);
   mongoose
     .connect(process.env.MONGODB_URL)
-    .then(() => console.log("Connected to Mongo DB"))
+    .then(() => console.log("Połączono z bazą danych MongoDB"))
     .catch((err) => {
-      console.error("failed to connect with mongo");
+      console.error("Błąd połączenia z bazą danych MongoDB");
       console.error(err);
     });
 };
@@ -44,7 +44,7 @@ const connectDB = () => {
 const startServer = async () => {
   try {
     connectDB();
-    app.listen(8080, () => console.log("Server started on port 8080"));
+    app.listen(8080, () => console.log("Serwer działa na porcie 8080"));
   } catch (error) {
     console.log(error);
   }

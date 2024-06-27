@@ -1,4 +1,6 @@
 import { FitnessCenterRounded, TimelapseRounded } from "@mui/icons-material";
+import BoltIcon from "@mui/icons-material/Bolt";
+import AssignmentIcon from '@mui/icons-material/Assignment';
 import React from "react";
 import styled from "styled-components";
 
@@ -37,10 +39,12 @@ const Sets = styled.div`
   font-weight: 500;
   display: flex;
   gap: 6px;
+  align-items: center;
 `;
 const Flex = styled.div`
   display: flex;
   gap: 16px;
+  
 `;
 const Details = styled.div`
   font-size: 15px;
@@ -52,25 +56,52 @@ const Details = styled.div`
 `;
 
 const WorkoutCard = ({ workout }) => {
+  let detailsText;
+  if (workout?.category === "Rower🚴🏼‍♂️") {
+    detailsText = (
+      <>
+        <BoltIcon sx={{ fontSize: "20px" }} />
+        {workout?.loadEffort} FTP
+      </>
+    );
+  } else if (workout?.category === "Siłowy🏋🏼‍♂️") {
+    detailsText = (
+      <>
+        <FitnessCenterRounded sx={{ fontSize: "20px" }} />
+        {workout?.loadEffort} kg
+      </>
+    );
+  } else if (workout?.category === "Bieganie🏃🏼‍♂️") {
+    detailsText = (
+      <>
+        <TimelapseRounded sx={{ fontSize: "20px" }} />
+        {workout?.loadEffort} km
+      </>
+    );
+  } else {
+    detailsText = (
+      <>
+        <TimelapseRounded sx={{ fontSize: "20px" }} />
+        {workout?.loadEffort} km
+      </>
+    );
+  }
+
   return (
     <Card>
-      <Category>#{workout?.category}</Category>
+      <Category>#{workout?.category} </Category>
       <Name>{workout?.workoutName}</Name>
       <Sets>
-        Count: {workout?.sets} sets X {workout?.reps} reps
+        <AssignmentIcon sx={{ fontSize: "20px", fill:"black" }} />{workout?.sets} X {workout?.reps}
       </Sets>
       <Flex>
+        <Details>{detailsText}</Details>
         <Details>
-          <FitnessCenterRounded sx={{ fontSize: "20px" }} />
-          {workout?.weight} kg
-        </Details>
-        <Details>
-          <TimelapseRounded sx={{ fontSize: "20px" }} />
+          <TimelapseRounded sx={{ fontSize: "20px"}} />
           {workout?.duration} min
         </Details>
       </Flex>
     </Card>
   );
 };
-
 export default WorkoutCard;

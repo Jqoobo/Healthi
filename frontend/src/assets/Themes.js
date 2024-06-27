@@ -1,8 +1,8 @@
 export const lightTheme = {
   bg: "#FFFFFF",
   bgLight: "#FFFFFF",
-  primary: "#5200FF",
-  secondary: "#5B86E5",
+  primary: "#9741FF",
+  secondary: "#450b8a",
 
   disabled: "#b1b2b3",
   menubar: "#191c29",

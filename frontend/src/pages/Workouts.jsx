@@ -95,7 +95,7 @@ const Workouts = () => {
     <Container>
       <Wrapper>
         <Left>
-          <Title>Select Date</Title>
+          <Title>Wybierz date</Title>
           <LocalizationProvider dateAdapter={AdapterDayjs}>
             <DateCalendar
               onChange={(e) => setDate(`${e.$M + 1}/${e.$D}/${e.$y}`)}
@@ -104,7 +104,7 @@ const Workouts = () => {
         </Left>
         <Right>
           <Section>
-            <SecTitle>Todays Workout</SecTitle>
+            <SecTitle>Dzisiejsze treningi</SecTitle>
             {loading ? (
               <CircularProgress />
             ) : (

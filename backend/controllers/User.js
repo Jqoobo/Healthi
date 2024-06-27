@@ -14,7 +14,7 @@ export const UserRegister = async (req, res, next) => {
     // Check if the email is in use
     const existingUser = await User.findOne({ email }).exec();
     if (existingUser) {
-      return next(createError(409, "Email is already in use."));
+      return next(createError(409, "Adres email jest już w użyciu❗️"));
     }
 
     const salt = bcrypt.genSaltSync(10);
@@ -43,7 +43,9 @@ export const UserLogin = async (req, res, next) => {
     const user = await User.findOne({ email: email });
     // Check if user exists
     if (!user) {
-      return next(createError(404, "User not found"));
+      return next(
+        createError(404, "Nie znaleziono użytkownika z podanymi danymi❗️")
+      );
     }
     console.log(user);
     // Check if password is correct
@@ -67,7 +69,7 @@ export const getUserDashboard = async (req, res, next) => {
     const userId = req.user?.id;
     const user = await User.findById(userId);
     if (!user) {
-      return next(createError(404, "User not found"));
+      return next(createError(404, "Nie znaleziono użytkownika❗️"));
     }
 
     const currentDateFormatted = new Date();
@@ -269,6 +271,15 @@ export const addWorkout = async (req, res, next) => {
       }
     });
 
+    // Check if any workout with the same name already exists
+    const existingWorkouts = await Workout.find({
+      user: userId,
+      workoutName: { $in: parsedWorkouts.map((workout) => workout.workoutName) },
+    });
+    if (existingWorkouts.length > 0) {
+      return next(createError(409, "Workout with the same name already exists"));
+    }
+
     // Calculate calories burnt for each workout
     await parsedWorkouts.forEach(async (workout) => {
       workout.caloriesBurned = parseFloat(calculateCaloriesBurnt(workout));
@@ -288,14 +299,12 @@ export const addWorkout = async (req, res, next) => {
 const parseWorkoutLine = (parts) => {
   const details = {};
   console.log(parts);
-  if (parts.length >= 5) {
+  if (parts.length >= 6) {
     details.workoutName = parts[1].substring(1).trim();
-    details.sets = parseInt(parts[2].split("sets")[0].substring(1).trim());
-    details.reps = parseInt(
-      parts[2].split("sets")[1].split("reps")[0].substring(1).trim()
-    );
-    details.weight = parseFloat(parts[3].split("kg")[0].substring(1).trim());
-    details.duration = parseFloat(parts[4].split("min")[0].substring(1).trim());
+    details.sets = parts[2].substring(1).trim();
+    details.reps = parseFloat(parts[3].substring(1).trim());
+    details.loadEffort = parts[4].substring(1).trim();
+    details.duration = parseFloat(parts[5].split("min")[0].substring(1).trim());
     console.log(details);
     return details;
   }
@@ -304,8 +313,8 @@ const parseWorkoutLine = (parts) => {
 
 // Function to calculate calories burnt for a workout
 const calculateCaloriesBurnt = (workoutDetails) => {
-  const durationInMinutes = parseInt(workoutDetails.duration);
-  const weightInKg = parseInt(workoutDetails.weight);
-  const caloriesBurntPerMinute = 5; // Sample value, actual calculation may vary
-  return durationInMinutes * caloriesBurntPerMinute * weightInKg;
+  const durationInMinutes = parseFloat(workoutDetails.duration);
+  const weightInKg = parseFloat(workoutDetails.loadEffort);
+  const caloriesBurntPerMinute = 5;
+  return (durationInMinutes * caloriesBurntPerMinute * weightInKg).toFixed(2);
 };

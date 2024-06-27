@@ -88,7 +88,6 @@ const CountsCard = ({ item, data }) => {
         <Value>
           {data && data[item.key].toFixed(2)}
           <Unit>{item.unit}</Unit>
-          <Span positive>(+10%)</Span>
         </Value>
         <Desc>{item.desc}</Desc>
       </Left>

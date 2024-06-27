@@ -17,12 +17,12 @@ const WorkoutSchema = new mongoose.Schema(
       unique: true,
     },
     sets: {
-      type: Number,
+      type: String,
     },
     reps: {
-      type: Number,
+      type: String,
     },
-    weight: {
+    loadEffort: {
       type: Number,
     },
     duration: {

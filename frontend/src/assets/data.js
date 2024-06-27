@@ -6,29 +6,29 @@ import {
 
 export const counts = [
   {
-    name: "Calories Burned",
+    name: "Spalane kalorie",
     icon: (
       <LocalFireDepartmentRounded sx={{ color: "inherit", fontSize: "26px" }} />
     ),
-    desc: "Total calories burned today",
+    desc: "Całkowita liczba spalonych kalorii dzisiaj",
     key: "totalCaloriesBurnt",
     unit: "kcal",
     color: "#eb9e34",
     lightColor: "#FDF4EA",
   },
   {
-    name: "Workouts",
+    name: "Treningi",
     icon: <FitnessCenterRounded sx={{ color: "inherit", fontSize: "26px" }} />,
-    desc: "Total no of workouts for today",
+    desc: "Całkowita liczba treningów dzisiaj",
     key: "totalWorkouts",
     unit: "",
     color: "#41C1A6",
     lightColor: "#E8F6F3",
   },
   {
-    name: "Average  Calories Burned",
+    name: "Średnie spalone kalorie na treningu",
     icon: <TimelineRounded sx={{ color: "inherit", fontSize: "26px" }} />,
-    desc: "Average Calories Burned on each workout",
+    desc: "Średnia liczba spalonych kalorii na treningach",
     key: "avgCaloriesBurntPerWorkout",
     unit: "kcal",
     color: "#FF9AD5",
