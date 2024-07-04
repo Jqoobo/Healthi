@@ -4,9 +4,10 @@ import WorkoutCard from "../components/cards/WorkoutCard";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { DateCalendar } from "@mui/x-date-pickers";
-import { getWorkouts } from "../api";
+import { getWorkouts, getGoals } from "../api";
 import { CircularProgress } from "@mui/material";
 import { useDispatch } from "react-redux";
+import GoalCard from "../components/cards/GoalCard";
 
 const Container = styled.div`
   flex: 1;
@@ -45,13 +46,19 @@ const Title = styled.div`
 `;
 const Right = styled.div`
   flex: 1;
+  @media (max-width: 600px) {
+    margin-top: 16px;
+  }
 `;
 const CardWrapper = styled.div`
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
   gap: 20px;
-  margin-bottom: 100px;
+  min-height: 150px;
+  height: 100%;
+  margin-bottom: 64px;
+  align-items: center;
   @media (max-width: 600px) {
     gap: 12px;
   }
@@ -66,10 +73,18 @@ const Section = styled.div`
     gap: 12px;
   }
 `;
+
 const SecTitle = styled.div`
   font-size: 22px;
   color: ${({ theme }) => theme.text_primary};
   font-weight: 500;
+`;
+
+const NoItems = styled.div`
+  color: ${({ theme }) => theme.text_secondary};
+  font-size: 16px;
+  font-weight: 500;
+  padding: 8px;
 `;
 
 const Workouts = () => {
@@ -77,20 +92,41 @@ const Workouts = () => {
   const [todaysWorkouts, setTodaysWorkouts] = useState([]);
   const [loading, setLoading] = useState(false);
   const [date, setDate] = useState("");
+  const [goalsList, setGoalsList] = useState([]);
 
-  const getTodaysWorkout = async () => {
+  const fetchData = async () => {
     setLoading(true);
     const token = localStorage.getItem("fittrack-app-token");
-    await getWorkouts(token, date ? `?date=${date}` : "").then((res) => {
-      setTodaysWorkouts(res?.data?.todaysWorkouts);
-      console.log(res.data);
+    try {
+      const [workoutRes, goalsRes] = await Promise.all([
+        getWorkouts(token, date ? `?date=${date}` : ""),
+        getGoals(token),
+      ]);
+
+      setTodaysWorkouts(workoutRes?.data?.todaysWorkouts);
+
+      const formattedGoals = goalsRes?.data.goals
+        .filter((goal) => {
+          const goalDate = new Date(goal.date).toLocaleDateString();
+          const selectedDate = new Date(date).toLocaleDateString();
+          return goalDate === selectedDate;
+        })
+        .map((goal) => ({
+          ...goal,
+          date: new Date(goal.date).toLocaleDateString(),
+        }));
+      setGoalsList(formattedGoals || []);
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    } finally {
       setLoading(false);
-    });
+    }
   };
 
   useEffect(() => {
-    getTodaysWorkout();
+    fetchData();
   }, [date]);
+
   return (
     <Container>
       <Wrapper>
@@ -104,14 +140,32 @@ const Workouts = () => {
         </Left>
         <Right>
           <Section>
-            <SecTitle>Dzisiejsze treningi</SecTitle>
+            <SecTitle>Treningi</SecTitle>
             {loading ? (
               <CircularProgress />
             ) : (
               <CardWrapper>
-                {todaysWorkouts.map((workout) => (
-                  <WorkoutCard workout={workout} />
-                ))}
+                {todaysWorkouts.length > 0 ? (
+                  todaysWorkouts.map((workout) => (
+                    <WorkoutCard workout={workout} />
+                  ))
+                ) : (
+                  <NoItems>Brak treningów</NoItems>
+                )}
+              </CardWrapper>
+            )}
+          </Section>
+          <Section>
+            <SecTitle>Cele</SecTitle>
+            {loading ? (
+              <CircularProgress />
+            ) : (
+              <CardWrapper>
+                {goalsList.length > 0 ? (
+                  goalsList.map((goals) => <GoalCard goals={goals} />)
+                ) : (
+                  <NoItems>Brak celi</NoItems>
+                )}
               </CardWrapper>
             )}
           </Section>

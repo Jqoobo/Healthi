@@ -61,7 +61,6 @@ const NavItems = styled.ul`
   gap: 32px;
   padding: 0 6px;
   list-style: none;
-
   @media screen and (max-width: 768px) {
     display: none;
   }
@@ -110,13 +109,13 @@ const MobileMenu = styled.ul`
   flex-direction: column;
   align-items: start;
   gap: 16px;
-  padding: 0 6px;
   list-style: none;
   width: 90%;
-  padding: 12px 40px 24px 40px;
+  padding: 20px 20px 20px 64px;
   background: ${({ theme }) => theme.bg};
+  fill: ${({ theme }) => theme.text_primary};
   position: absolute;
-  top: 80px;
+  top: 65px;
   right: 0;
   transition: all 0.6s ease-in-out;
   transform: ${({ isOpen }) =>
@@ -134,7 +133,7 @@ const Navbar = ({ currentUser }) => {
     <Nav>
       <NavContainer>
         <Mobileicon onClick={() => setisOpen(!isOpen)}>
-          <MenuRounded sx={{ color: "inherit" }} />
+          <MenuRounded sx={{ color: "black" }} />
         </Mobileicon>
         <NavLogo to="/">
           <Logo src={LogoImg} />
@@ -144,22 +143,20 @@ const Navbar = ({ currentUser }) => {
         <MobileMenu isOpen={isOpen}>
           <Navlink to="/">Home</Navlink>
           <Navlink to="/workouts">Treningi</Navlink>
-          <Navlink to="/tutorials">Cele</Navlink>
-          <Navlink to="/blogs">Blog</Navlink>
-          <Navlink to="/contact">Kontakt</Navlink>
+          <Navlink to="/goals">Cele</Navlink>
         </MobileMenu>
 
         <NavItems>
           <Navlink to="/">Home</Navlink>
           <Navlink to="/workouts">Treningi</Navlink>
-          <Navlink to="/tutorials">Cele</Navlink>
-          <Navlink to="/blogs">Blog</Navlink>
-          <Navlink to="/contact">Kontakt</Navlink>
+          <Navlink to="/goals">Cele</Navlink>
         </NavItems>
 
         <UserContainer>
           <Avatar src={currentUser?.img}>{currentUser?.name[0]}</Avatar>
-          <TextButton onClick={() => dispatch(logout())}>Logout</TextButton>
+          <TextButton onClick={() => dispatch(logout())}>
+            Wyloguj się
+          </TextButton>
         </UserContainer>
       </NavContainer>
     </Nav>

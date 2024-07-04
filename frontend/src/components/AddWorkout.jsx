@@ -27,6 +27,7 @@ const Title = styled.div`
 `;
 
 const Select = styled.select`
+  font-family: "Poppins", sans-serif;
   padding: 8px 12px;
   border: 1px solid ${({ theme }) => theme.text_primary + 20};
   border-radius: 8px;
@@ -61,7 +62,7 @@ const AddWorkout = ({ workout, setWorkout, addNewWorkout, buttonLoading }) => {
     } else {
       setWorkout(`#${e.target.value}\n-Nazwa ćwiczenia
 -Seria
--Ilośc powtórzeń
+-Ilość powtórzeń
 -Wysiłek
 -Czas trwania`);
     }

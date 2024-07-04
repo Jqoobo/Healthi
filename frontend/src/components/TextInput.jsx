@@ -75,6 +75,7 @@ const OutlinedInput = styled.div`
 `;
 
 const Input = styled.input`
+  font-family: "Poppins", sans-serif;
   width: 100%;
   font-size: 14px;
   outline: none;

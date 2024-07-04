@@ -4,6 +4,7 @@ import dotenv from "dotenv";
 import { createError } from "../error.js";
 import User from "../models/User.js";
 import Workout from "../models/Workout.js";
+import Goal from "../models/Goal.js";
 
 dotenv.config();
 
@@ -11,7 +12,6 @@ export const UserRegister = async (req, res, next) => {
   try {
     const { email, password, name, img } = req.body;
 
-    // Check if the email is in use
     const existingUser = await User.findOne({ email }).exec();
     if (existingUser) {
       return next(createError(409, "Adres email jest już w użyciu❗️"));
@@ -41,14 +41,12 @@ export const UserLogin = async (req, res, next) => {
     const { email, password } = req.body;
 
     const user = await User.findOne({ email: email });
-    // Check if user exists
     if (!user) {
       return next(
         createError(404, "Nie znaleziono użytkownika z podanymi danymi❗️")
       );
     }
     console.log(user);
-    // Check if password is correct
     const isPasswordCorrect = await bcrypt.compareSync(password, user.password);
     if (!isPasswordCorrect) {
       return next(createError(403, "Incorrect password"));
@@ -84,7 +82,6 @@ export const getUserDashboard = async (req, res, next) => {
       currentDateFormatted.getDate() + 1
     );
 
-    //calculte total calories burnt
     const totalCaloriesBurnt = await Workout.aggregate([
       { $match: { user: user._id, date: { $gte: startToday, $lt: endToday } } },
       {
@@ -95,19 +92,16 @@ export const getUserDashboard = async (req, res, next) => {
       },
     ]);
 
-    //Calculate total no of workouts
     const totalWorkouts = await Workout.countDocuments({
       user: userId,
       date: { $gte: startToday, $lt: endToday },
     });
 
-    //Calculate average calories burnt per workout
     const avgCaloriesBurntPerWorkout =
       totalCaloriesBurnt.length > 0
         ? totalCaloriesBurnt[0].totalCaloriesBurnt / totalWorkouts
         : 0;
 
-    // Fetch category of workouts
     const categoryCalories = await Workout.aggregate([
       { $match: { user: user._id, date: { $gte: startToday, $lt: endToday } } },
       {
@@ -117,8 +111,6 @@ export const getUserDashboard = async (req, res, next) => {
         },
       },
     ]);
-
-    //Format category data for pie chart
 
     const pieChartData = categoryCalories.map((category, index) => ({
       id: index,
@@ -159,7 +151,7 @@ export const getUserDashboard = async (req, res, next) => {
           },
         },
         {
-          $sort: { _id: 1 }, // Sort by date in ascending order
+          $sort: { _id: 1 },
         },
       ]);
 
@@ -227,9 +219,7 @@ export const addWorkout = async (req, res, next) => {
     if (!workoutString) {
       return next(createError(400, "Workout string is missing"));
     }
-    // Split workoutString into lines
     const eachworkout = workoutString.split(";").map((line) => line.trim());
-    // Check if any workouts start with "#" to indicate categories
     const categories = eachworkout.filter((line) => line.startsWith("#"));
     if (categories.length === 0) {
       return next(createError(400, "No categories found in workout string"));
@@ -239,7 +229,6 @@ export const addWorkout = async (req, res, next) => {
     let currentCategory = "";
     let count = 0;
 
-    // Loop through each line to parse workout details
     await eachworkout.forEach((line) => {
       count++;
       if (line.startsWith("#")) {
@@ -251,16 +240,13 @@ export const addWorkout = async (req, res, next) => {
           );
         }
 
-        // Update current category
         currentCategory = parts[0].substring(1).trim();
-        // Extract workout details
         const workoutDetails = parseWorkoutLine(parts);
         if (workoutDetails == null) {
           return next(createError(400, "Please enter in proper format "));
         }
 
         if (workoutDetails) {
-          // Add category to workout details
           workoutDetails.category = currentCategory;
           parsedWorkouts.push(workoutDetails);
         }
@@ -271,16 +257,18 @@ export const addWorkout = async (req, res, next) => {
       }
     });
 
-    // Check if any workout with the same name already exists
     const existingWorkouts = await Workout.find({
       user: userId,
-      workoutName: { $in: parsedWorkouts.map((workout) => workout.workoutName) },
+      workoutName: {
+        $in: parsedWorkouts.map((workout) => workout.workoutName),
+      },
     });
     if (existingWorkouts.length > 0) {
-      return next(createError(409, "Workout with the same name already exists"));
+      return next(
+        createError(409, "Workout with the same name already exists")
+      );
     }
 
-    // Calculate calories burnt for each workout
     await parsedWorkouts.forEach(async (workout) => {
       workout.caloriesBurned = parseFloat(calculateCaloriesBurnt(workout));
       await Workout.create({ ...workout, user: userId });
@@ -295,7 +283,6 @@ export const addWorkout = async (req, res, next) => {
   }
 };
 
-// Function to parse workout details from a line
 const parseWorkoutLine = (parts) => {
   const details = {};
   console.log(parts);
@@ -311,10 +298,55 @@ const parseWorkoutLine = (parts) => {
   return null;
 };
 
-// Function to calculate calories burnt for a workout
 const calculateCaloriesBurnt = (workoutDetails) => {
   const durationInMinutes = parseFloat(workoutDetails.duration);
-  const weightInKg = parseFloat(workoutDetails.loadEffort);
-  const caloriesBurntPerMinute = 5;
-  return (durationInMinutes * caloriesBurntPerMinute * weightInKg).toFixed(2);
+  const caloriesBurntPerMinute = 2;
+  return (durationInMinutes * caloriesBurntPerMinute * 5.25).toFixed(2);
+};
+
+export const addGoal = async (req, res, next) => {
+  try {
+    const userId = req.user?.id;
+    const { name, description, status, date } = req.body;
+
+    console.log("Received goal data:", {
+      userId,
+      name,
+      description,
+      status,
+      date,
+    });
+
+    if (!name || !date) {
+      return next(createError(400, "Name and date are required"));
+    }
+
+    const newGoal = new Goal({
+      user: userId,
+      name,
+      description,
+      status,
+      date,
+    });
+
+    const savedGoal = await newGoal.save();
+    console.log("Goal saved successfully:", savedGoal);
+
+    return res.status(201).json({ goal: savedGoal });
+  } catch (error) {
+    console.error("Error in addGoal function:", error);
+    next(error);
+  }
+};
+
+export const getGoals = async (req, res, next) => {
+  try {
+    const userId = req.user.id;
+
+    const goals = await Goal.find({ user: userId }).exec();
+
+    return res.status(200).json({ goals });
+  } catch (error) {
+    return next(error);
+  }
 };

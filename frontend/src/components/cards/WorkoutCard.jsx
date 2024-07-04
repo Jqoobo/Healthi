@@ -1,6 +1,8 @@
 import { FitnessCenterRounded, TimelapseRounded } from "@mui/icons-material";
 import BoltIcon from "@mui/icons-material/Bolt";
-import AssignmentIcon from '@mui/icons-material/Assignment';
+import AssignmentIcon from "@mui/icons-material/Assignment";
+import DirectionsRunIcon from "@mui/icons-material/DirectionsRun";
+import PoolIcon from "@mui/icons-material/Pool";
 import React from "react";
 import styled from "styled-components";
 
@@ -44,7 +46,6 @@ const Sets = styled.div`
 const Flex = styled.div`
   display: flex;
   gap: 16px;
-  
 `;
 const Details = styled.div`
   font-size: 15px;
@@ -74,17 +75,28 @@ const WorkoutCard = ({ workout }) => {
   } else if (workout?.category === "Bieganie🏃🏼‍♂️") {
     detailsText = (
       <>
-        <TimelapseRounded sx={{ fontSize: "20px" }} />
+        <DirectionsRunIcon sx={{ fontSize: "20px" }} />
         {workout?.loadEffort} km
       </>
     );
   } else {
     detailsText = (
       <>
-        <TimelapseRounded sx={{ fontSize: "20px" }} />
+        <PoolIcon sx={{ fontSize: "20px" }} />
         {workout?.loadEffort} km
       </>
     );
+  }
+
+  let setandreps;
+  if (workout?.category === "Siłowy🏋🏼‍♂️" || workout?.category === "Pływanie🏊🏼‍♂️") {
+    setandreps = (
+      <>
+        {workout?.sets} X {workout?.reps}
+      </>
+    );
+  } else {
+    setandreps = <>{workout?.sets}</>;
   }
 
   return (
@@ -92,12 +104,13 @@ const WorkoutCard = ({ workout }) => {
       <Category>#{workout?.category} </Category>
       <Name>{workout?.workoutName}</Name>
       <Sets>
-        <AssignmentIcon sx={{ fontSize: "20px", fill:"black" }} />{workout?.sets} X {workout?.reps}
+        <AssignmentIcon sx={{ fontSize: "20px", fill: "black" }} />
+        {setandreps}
       </Sets>
       <Flex>
         <Details>{detailsText}</Details>
         <Details>
-          <TimelapseRounded sx={{ fontSize: "20px"}} />
+          <TimelapseRounded sx={{ fontSize: "20px" }} />
           {workout?.duration} min
         </Details>
       </Flex>
