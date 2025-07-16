@@ -88,6 +88,7 @@ const NoItems = styled.div`
 `;
 
 const Workouts = () => {
+  // eslint-disable-next-line no-unused-vars
   const dispatch = useDispatch();
   const [todaysWorkouts, setTodaysWorkouts] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -125,6 +126,7 @@ const Workouts = () => {
 
   useEffect(() => {
     fetchData();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [date]);
 
   return (

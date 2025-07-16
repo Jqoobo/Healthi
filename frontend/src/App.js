@@ -2,7 +2,6 @@ import { ThemeProvider, styled } from "styled-components";
 import { lightTheme } from "./assets/Themes";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import LoginPage from "./pages/LoginPage";
-import { useState } from "react";
 import { useSelector } from "react-redux";
 import Navbar from "./components/Navbar";
 import Dashboard from "./pages/Dashboard";

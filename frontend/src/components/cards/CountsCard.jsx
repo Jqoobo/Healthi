@@ -43,6 +43,7 @@ const Unit = styled.div`
   font-size: 14px;
   margin-bottom: 8px;
 `;
+// eslint-disable-next-line no-unused-vars
 const Span = styled.div`
   margin-bottom: 8px;
   font-weight: 500;

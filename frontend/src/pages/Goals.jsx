@@ -144,6 +144,7 @@ const NoItems = styled.div`
 `;
 
 const Goals = () => {
+  // eslint-disable-next-line no-unused-vars
   const dispatch = useDispatch();
   const [goalsList, setGoalsList] = useState([]);
   const [loading, setLoading] = useState(false);
